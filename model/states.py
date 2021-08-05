@@ -2,6 +2,8 @@ from matplotlib import colors
 import re
 from dataclasses import dataclass
 
+from kink import di, inject
+
 @dataclass
 class Savestate:
     name: str
@@ -32,3 +34,30 @@ def new_savestate(username: str) -> Savestate:
         despair=3)
 
     return new_state
+
+@inject
+def modify_emotions(emotion: str, increase: bool, state: Savestate) -> None:
+    print(emotion)
+    if increase:
+      modifier = 1
+    else:
+      modifier = -1
+    if emotion == "happiness":
+      print("increasing happiness")
+      state.happiness += modifier
+    elif emotion == "despair":
+      print("increasing despair")
+      state.despair += modifier
+    elif emotion == "anger":
+      print("increasing anger")
+      state.anger += "modifier"
+
+    di["states"] = state
+
+
+@inject
+def get_state(state: Savestate) -> None:
+  print(state.happiness)
+  print(state.anger)
+  print(state.despair)
+
